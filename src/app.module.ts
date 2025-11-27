@@ -7,6 +7,11 @@ import { PrismaModule } from './prisma';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
+import { ServicesModule } from './services/services.module';
+import { ProvidersModule } from './providers/providers.module';
+import { BookingsModule } from './bookings/bookings.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { FavoritesModule } from './favorites/favorites.module';
 import { JwtAuthGuard } from './auth/guards';
 import { AllExceptionsFilter } from './common/filters';
 import { TransformInterceptor } from './common/interceptors';
@@ -21,6 +26,11 @@ import { TransformInterceptor } from './common/interceptors';
     AuthModule,
     UsersModule,
     CategoriesModule,
+    ServicesModule,
+    ProvidersModule,
+    BookingsModule,
+    ReviewsModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [
