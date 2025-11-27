@@ -184,99 +184,99 @@ enum SubscriptionStatus {
 
 /// Usuario del sistema - puede ser cliente, proveedor o ambos
 model User {
-  id                    String    @id @default(cuid())
-  email                 String    @unique
-  emailVerified         Boolean   @default(false)
-  emailVerifiedAt       DateTime?
-  phone                 String?   @unique
-  phoneVerified         Boolean   @default(false)
-  phoneVerifiedAt       DateTime?
-  passwordHash          String
+  id              String    @id @default(cuid())
+  email           String    @unique
+  emailVerified   Boolean   @default(false)
+  emailVerifiedAt DateTime?
+  phone           String?   @unique
+  phoneVerified   Boolean   @default(false)
+  phoneVerifiedAt DateTime?
+  passwordHash    String
 
   // Información personal
-  firstName             String
-  lastName              String
-  displayName           String?
-  bio                   String?   @db.Text
-  avatar                String?
-  coverImage            String?
-  dateOfBirth           DateTime?
-  gender                String?
+  firstName   String
+  lastName    String
+  displayName String?
+  bio         String?   @db.Text
+  avatar      String?
+  coverImage  String?
+  dateOfBirth DateTime?
+  gender      String?
 
   // Rol y estado
-  role                  UserRole  @default(CLIENT)
-  status                UserStatus @default(PENDING_VERIFICATION)
+  role   UserRole   @default(CLIENT)
+  status UserStatus @default(PENDING_VERIFICATION)
 
   // Ubicación principal
-  address               String?
-  city                  String?
-  state                 String?
-  country               String?   @default("CO")
-  postalCode            String?
-  latitude              Float?
-  longitude             Float?
+  address    String?
+  city       String?
+  state      String?
+  country    String? @default("CO")
+  postalCode String?
+  latitude   Float?
+  longitude  Float?
 
   // Configuración
-  language              String    @default("es")
-  timezone              String    @default("America/Bogota")
-  currency              String    @default("COP")
+  language String @default("es")
+  timezone String @default("America/Bogota")
+  currency String @default("COP")
 
   // Notificaciones
-  pushToken             String?
-  notifyEmail           Boolean   @default(true)
-  notifyPush            Boolean   @default(true)
-  notifySms             Boolean   @default(false)
-  notifyPromotions      Boolean   @default(true)
+  pushToken        String?
+  notifyEmail      Boolean @default(true)
+  notifyPush       Boolean @default(true)
+  notifySms        Boolean @default(false)
+  notifyPromotions Boolean @default(true)
 
   // OAuth
-  googleId              String?   @unique
-  facebookId            String?   @unique
-  appleId               String?   @unique
+  googleId   String? @unique
+  facebookId String? @unique
+  appleId    String? @unique
 
   // Seguridad
-  twoFactorEnabled      Boolean   @default(false)
-  twoFactorSecret       String?
-  lastLoginAt           DateTime?
-  lastLoginIp           String?
-  failedLoginAttempts   Int       @default(0)
-  lockedUntil           DateTime?
+  twoFactorEnabled    Boolean   @default(false)
+  twoFactorSecret     String?
+  lastLoginAt         DateTime?
+  lastLoginIp         String?
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
 
   // Métricas (desnormalizadas para performance)
-  totalBookingsAsClient Int       @default(0)
-  totalSpent            Decimal   @default(0) @db.Decimal(12, 2)
+  totalBookingsAsClient Int     @default(0)
+  totalSpent            Decimal @default(0) @db.Decimal(12, 2)
   averageRatingGiven    Float?
 
   // Timestamps
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-  deletedAt             DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   // Relaciones
-  providerProfile       ProviderProfile?
-  services              Service[]
-  bookingsAsClient      Booking[]       @relation("ClientBookings")
-  bookingsAsProvider    Booking[]       @relation("ProviderBookings")
-  reviewsWritten        Review[]        @relation("ReviewAuthor")
-  reviewsReceived       Review[]        @relation("ReviewTarget")
-  sentMessages          Message[]       @relation("MessageSender")
-  receivedMessages      Message[]       @relation("MessageReceiver")
-  conversations         ConversationParticipant[]
-  notifications         Notification[]
-  favorites             Favorite[]
-  searchHistory         SearchHistory[]
-  devices               UserDevice[]
-  verifications         UserVerification[]
-  reports               Report[]        @relation("ReportAuthor")
-  reportsReceived       Report[]        @relation("ReportTarget")
-  disputesAsClient      Dispute[]       @relation("DisputeClient")
-  disputesAsProvider    Dispute[]       @relation("DisputeProvider")
-  referralsMade         Referral[]      @relation("ReferrerUser")
-  referredBy            Referral?       @relation("ReferredUser")
-  subscription          Subscription?
-  paymentMethods        UserPaymentMethod[]
-  transactions          Transaction[]
-  activityLogs          ActivityLog[]
-  addresses             UserAddress[]
+  providerProfile    ProviderProfile?
+  services           Service[]
+  bookingsAsClient   Booking[]                 @relation("ClientBookings")
+  bookingsAsProvider Booking[]                 @relation("ProviderBookings")
+  reviewsWritten     Review[]                  @relation("ReviewAuthor")
+  reviewsReceived    Review[]                  @relation("ReviewTarget")
+  sentMessages       Message[]                 @relation("MessageSender")
+  receivedMessages   Message[]                 @relation("MessageReceiver")
+  conversations      ConversationParticipant[]
+  notifications      Notification[]
+  favorites          Favorite[]
+  searchHistory      SearchHistory[]
+  devices            UserDevice[]
+  verifications      UserVerification[]
+  reports            Report[]                  @relation("ReportAuthor")
+  reportsReceived    Report[]                  @relation("ReportTarget")
+  disputesAsClient   Dispute[]                 @relation("DisputeClient")
+  disputesAsProvider Dispute[]                 @relation("DisputeProvider")
+  referralsMade      Referral[]                @relation("ReferrerUser")
+  referredBy         Referral?                 @relation("ReferredUser")
+  subscription       Subscription?
+  paymentMethods     UserPaymentMethod[]
+  transactions       Transaction[]
+  activityLogs       ActivityLog[]
+  addresses          UserAddress[]
 
   @@index([email])
   @@index([phone])
@@ -290,22 +290,22 @@ model User {
 
 /// Dirección adicional del usuario
 model UserAddress {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  label       String   // "Casa", "Trabajo", etc.
-  address     String
-  city        String
-  state       String
-  country     String   @default("CO")
-  postalCode  String?
-  latitude    Float?
-  longitude   Float?
-  isDefault   Boolean  @default(false)
+  label      String // "Casa", "Trabajo", etc.
+  address    String
+  city       String
+  state      String
+  country    String  @default("CO")
+  postalCode String?
+  latitude   Float?
+  longitude  Float?
+  isDefault  Boolean @default(false)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@map("user_addresses")
@@ -313,17 +313,17 @@ model UserAddress {
 
 /// Dispositivos del usuario para notificaciones push
 model UserDevice {
-  id          String   @id @default(cuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   deviceId    String
-  platform    String   // ios, android, web
+  platform    String // ios, android, web
   pushToken   String?
   appVersion  String?
   osVersion   String?
   deviceModel String?
-  isActive    Boolean  @default(true)
+  isActive    Boolean @default(true)
 
   lastActiveAt DateTime @default(now())
   createdAt    DateTime @default(now())
@@ -337,31 +337,31 @@ model UserDevice {
 
 /// Verificaciones del usuario
 model UserVerification {
-  id              String             @id @default(cuid())
-  userId          String
-  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type            VerificationType
-  status          VerificationStatus @default(PENDING)
+  type   VerificationType
+  status VerificationStatus @default(PENDING)
 
   // Documentos/evidencia
-  documentType    String?            // DNI, Pasaporte, Licencia, etc.
-  documentNumber  String?
-  documentFront   String?            // URL imagen
-  documentBack    String?            // URL imagen
-  selfieWithDoc   String?            // URL imagen
+  documentType   String? // DNI, Pasaporte, Licencia, etc.
+  documentNumber String?
+  documentFront  String? // URL imagen
+  documentBack   String? // URL imagen
+  selfieWithDoc  String? // URL imagen
 
   // Verificación profesional
-  certifications  Json?              // Array de certificaciones
+  certifications Json? // Array de certificaciones
 
   // Resultado
   verifiedAt      DateTime?
-  verifiedBy      String?            // Admin ID
+  verifiedBy      String? // Admin ID
   rejectionReason String?
   expiresAt       DateTime?
 
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([type, status])
@@ -370,72 +370,72 @@ model UserVerification {
 
 /// Perfil extendido para proveedores de servicios
 model ProviderProfile {
-  id                    String   @id @default(cuid())
-  userId                String   @unique
-  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Información profesional
-  businessName          String?
-  headline              String?          // Ej: "Plomero con 10 años de experiencia"
-  description           String?          @db.Text
-  yearsOfExperience     Int?
+  businessName      String?
+  headline          String? // Ej: "Plomero con 10 años de experiencia"
+  description       String? @db.Text
+  yearsOfExperience Int?
 
   // Documentos legales
-  taxId                 String?          // RUT/NIT
-  businessLicense       String?
-  insuranceNumber       String?
-  insuranceExpiry       DateTime?
+  taxId           String? // RUT/NIT
+  businessLicense String?
+  insuranceNumber String?
+  insuranceExpiry DateTime?
 
   // Configuración de servicio
-  serviceRadius         Int              @default(10) // km
-  travelFee             Decimal?         @db.Decimal(10, 2)
-  travelFeePerKm        Decimal?         @db.Decimal(10, 2)
-  minimumBookingHours   Float?           @default(1)
-  cancellationPolicy    String?          @db.Text
-  instantBooking        Boolean          @default(false)
+  serviceRadius       Int      @default(10) // km
+  travelFee           Decimal? @db.Decimal(10, 2)
+  travelFeePerKm      Decimal? @db.Decimal(10, 2)
+  minimumBookingHours Float?   @default(1)
+  cancellationPolicy  String?  @db.Text
+  instantBooking      Boolean  @default(false)
 
   // Portfolio
-  portfolioImages       String[]         // URLs
-  portfolioVideos       String[]         // URLs
+  portfolioImages String[] // URLs
+  portfolioVideos String[] // URLs
 
   // Métricas (desnormalizadas)
-  totalServices         Int              @default(0)
-  totalBookings         Int              @default(0)
-  totalEarnings         Decimal          @default(0) @db.Decimal(12, 2)
-  completionRate        Float?           // % de trabajos completados
-  responseRate          Float?           // % de mensajes respondidos
-  averageResponseTime   Int?             // minutos
-  averageRating         Float?
-  totalReviews          Int              @default(0)
-  repeatClientRate      Float?           // % de clientes que repiten
+  totalServices       Int     @default(0)
+  totalBookings       Int     @default(0)
+  totalEarnings       Decimal @default(0) @db.Decimal(12, 2)
+  completionRate      Float? // % de trabajos completados
+  responseRate        Float? // % de mensajes respondidos
+  averageResponseTime Int? // minutos
+  averageRating       Float?
+  totalReviews        Int     @default(0)
+  repeatClientRate    Float? // % de clientes que repiten
 
   // Badges y logros
-  badges                String[]         // ["verified", "top_rated", "fast_response", etc.]
-  featuredUntil         DateTime?        // Proveedor destacado
+  badges        String[] // ["verified", "top_rated", "fast_response", etc.]
+  featuredUntil DateTime? // Proveedor destacado
 
   // Verificaciones
-  identityVerified      Boolean          @default(false)
-  phoneVerified         Boolean          @default(false)
-  emailVerified         Boolean          @default(false)
-  backgroundChecked     Boolean          @default(false)
+  identityVerified  Boolean @default(false)
+  phoneVerified     Boolean @default(false)
+  emailVerified     Boolean @default(false)
+  backgroundChecked Boolean @default(false)
 
   // Estado
-  isAvailable           Boolean          @default(true)
-  vacationMode          Boolean          @default(false)
-  vacationUntil         DateTime?
+  isAvailable   Boolean   @default(true)
+  vacationMode  Boolean   @default(false)
+  vacationUntil DateTime?
 
   // Pagos
   preferredPaymentMethod PaymentMethod?
-  bankName              String?
-  bankAccountNumber     String?
-  bankAccountType       String?
+  bankName               String?
+  bankAccountNumber      String?
+  bankAccountType        String?
 
-  createdAt             DateTime         @default(now())
-  updatedAt             DateTime         @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relaciones
-  availability          ProviderAvailability[]
-  specialDates          ProviderSpecialDate[]
+  availability ProviderAvailability[]
+  specialDates ProviderSpecialDate[]
 
   @@index([isAvailable])
   @@index([averageRating])
@@ -449,15 +449,15 @@ model ProviderAvailability {
   providerProfileId String
   providerProfile   ProviderProfile @relation(fields: [providerProfileId], references: [id], onDelete: Cascade)
 
-  dayOfWeek         DayOfWeek
-  isAvailable       Boolean         @default(true)
-  startTime         String          // "09:00"
-  endTime           String          // "18:00"
-  breakStart        String?         // "13:00"
-  breakEnd          String?         // "14:00"
+  dayOfWeek   DayOfWeek
+  isAvailable Boolean   @default(true)
+  startTime   String // "09:00"
+  endTime     String // "18:00"
+  breakStart  String? // "13:00"
+  breakEnd    String? // "14:00"
 
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([providerProfileId, dayOfWeek])
   @@map("provider_availability")
@@ -469,14 +469,14 @@ model ProviderSpecialDate {
   providerProfileId String
   providerProfile   ProviderProfile @relation(fields: [providerProfileId], references: [id], onDelete: Cascade)
 
-  date              DateTime        @db.Date
-  isAvailable       Boolean         @default(false)
-  startTime         String?
-  endTime           String?
-  reason            String?         // "Vacaciones", "Feriado", etc.
+  date        DateTime @db.Date
+  isAvailable Boolean  @default(false)
+  startTime   String?
+  endTime     String?
+  reason      String? // "Vacaciones", "Feriado", etc.
 
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([providerProfileId, date])
   @@index([date])
@@ -485,37 +485,37 @@ model ProviderSpecialDate {
 
 /// Categorías de servicios
 model Category {
-  id              String     @id @default(cuid())
-  name            String
-  slug            String     @unique
-  description     String?
-  icon            String?    // Nombre del icono o URL
-  image           String?    // URL imagen de categoría
-  color           String?    // Color hex para UI
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  icon        String? // Nombre del icono o URL
+  image       String? // URL imagen de categoría
+  color       String? // Color hex para UI
 
   // Jerarquía
-  parentId        String?
-  parent          Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  subcategories   Category[] @relation("CategoryHierarchy")
+  parentId      String?
+  parent        Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  subcategories Category[] @relation("CategoryHierarchy")
 
   // Orden y visibilidad
-  sortOrder       Int        @default(0)
-  isActive        Boolean    @default(true)
-  isFeatured      Boolean    @default(false)
+  sortOrder  Int     @default(0)
+  isActive   Boolean @default(true)
+  isFeatured Boolean @default(false)
 
   // SEO
   metaTitle       String?
   metaDescription String?
 
   // Métricas
-  serviceCount    Int        @default(0)
+  serviceCount Int @default(0)
 
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relaciones
-  services        Service[]
-  attributes      CategoryAttribute[]
+  services   Service[]
+  attributes CategoryAttribute[]
 
   @@index([slug])
   @@index([parentId])
@@ -525,19 +525,19 @@ model Category {
 
 /// Atributos personalizados por categoría
 model CategoryAttribute {
-  id          String   @id @default(cuid())
-  categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  name        String   // "Tipo de corte", "Material", etc.
-  slug        String
-  type        String   // "select", "multiselect", "text", "number", "boolean"
-  options     Json?    // ["Corte simple", "Corte con diseño", ...]
-  isRequired  Boolean  @default(false)
-  sortOrder   Int      @default(0)
+  name       String // "Tipo de corte", "Material", etc.
+  slug       String
+  type       String // "select", "multiselect", "text", "number", "boolean"
+  options    Json? // ["Corte simple", "Corte con diseño", ...]
+  isRequired Boolean @default(false)
+  sortOrder  Int     @default(0)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([categoryId, slug])
   @@map("category_attributes")
@@ -545,49 +545,49 @@ model CategoryAttribute {
 
 /// Servicios ofrecidos por proveedores
 model Service {
-  id                String        @id @default(cuid())
-  providerId        String
-  provider          User          @relation(fields: [providerId], references: [id], onDelete: Cascade)
-  categoryId        String
-  category          Category      @relation(fields: [categoryId], references: [id])
+  id         String   @id @default(cuid())
+  providerId String
+  provider   User     @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 
   // Información básica
-  title             String
-  slug              String
-  description       String        @db.Text
-  shortDescription  String?       @db.VarChar(300)
+  title            String
+  slug             String
+  description      String  @db.Text
+  shortDescription String? @db.VarChar(300)
 
   // Precios
-  priceType         PriceType     @default(FIXED)
-  price             Decimal       @db.Decimal(10, 2)
-  priceMax          Decimal?      @db.Decimal(10, 2) // Para rangos
-  currency          String        @default("COP")
-  priceUnit         String?       // "hora", "metro²", "unidad", etc.
+  priceType PriceType @default(FIXED)
+  price     Decimal   @db.Decimal(10, 2)
+  priceMax  Decimal?  @db.Decimal(10, 2) // Para rangos
+  currency  String    @default("COP")
+  priceUnit String? // "hora", "metro²", "unidad", etc.
 
   // Duración estimada
-  durationMinutes   Int?
+  durationMinutes    Int?
   durationMaxMinutes Int?
 
   // Media
-  images            String[]      // URLs
-  videos            String[]      // URLs
-  thumbnail         String?       // URL imagen principal
+  images    String[] // URLs
+  videos    String[] // URLs
+  thumbnail String? // URL imagen principal
 
   // Ubicación
-  serviceArea       String?       // "Domicilio", "En local", "Ambos"
-  address           String?
-  city              String?
-  state             String?
-  country           String?       @default("CO")
-  latitude          Float?
-  longitude         Float?
-  serviceRadius     Int?          // km, override del perfil
+  serviceArea   String? // "Domicilio", "En local", "Ambos"
+  address       String?
+  city          String?
+  state         String?
+  country       String? @default("CO")
+  latitude      Float?
+  longitude     Float?
+  serviceRadius Int? // km, override del perfil
 
   // Atributos dinámicos
-  attributes        Json?         // Valores de CategoryAttribute
+  attributes Json? // Valores de CategoryAttribute
 
   // Tags para búsqueda
-  tags              String[]
+  tags String[]
 
   // Configuración
   status            ServiceStatus @default(DRAFT)
@@ -600,39 +600,39 @@ model Service {
   depositPercentage Int?
 
   // Límites
-  maxBookingsPerDay Int?
-  advanceBookingDays Int          @default(30)
-  minAdvanceHours   Int           @default(2)
+  maxBookingsPerDay  Int?
+  advanceBookingDays Int  @default(30)
+  minAdvanceHours    Int  @default(2)
 
   // Métricas (desnormalizadas)
-  viewCount         Int           @default(0)
-  bookingCount      Int           @default(0)
-  completedCount    Int           @default(0)
-  averageRating     Float?
-  reviewCount       Int           @default(0)
-  favoriteCount     Int           @default(0)
+  viewCount      Int    @default(0)
+  bookingCount   Int    @default(0)
+  completedCount Int    @default(0)
+  averageRating  Float?
+  reviewCount    Int    @default(0)
+  favoriteCount  Int    @default(0)
 
   // SEO
-  metaTitle         String?
-  metaDescription   String?
+  metaTitle       String?
+  metaDescription String?
 
   // Moderación
-  rejectionReason   String?
-  reviewedAt        DateTime?
-  reviewedBy        String?
+  rejectionReason String?
+  reviewedAt      DateTime?
+  reviewedBy      String?
 
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  publishedAt       DateTime?
-  deletedAt         DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  publishedAt DateTime?
+  deletedAt   DateTime?
 
   // Relaciones
-  bookings          Booking[]
-  reviews           Review[]
-  favorites         Favorite[]
-  packages          ServicePackage[]
-  faqs              ServiceFAQ[]
-  promotions        ServicePromotion[]
+  bookings   Booking[]
+  reviews    Review[]
+  favorites  Favorite[]
+  packages   ServicePackage[]
+  faqs       ServiceFAQ[]
+  promotions ServicePromotion[]
 
   @@unique([providerId, slug])
   @@index([categoryId])
@@ -649,9 +649,9 @@ model Service {
 
 /// Paquetes de servicio (combos, ofertas)
 model ServicePackage {
-  id              String   @id @default(cuid())
-  serviceId       String
-  service         Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  id        String  @id @default(cuid())
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   name            String
   description     String?
@@ -663,10 +663,10 @@ model ServicePackage {
   sortOrder       Int      @default(0)
   isActive        Boolean  @default(true)
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  bookings        Booking[]
+  bookings Booking[]
 
   @@index([serviceId])
   @@map("service_packages")
@@ -674,13 +674,13 @@ model ServicePackage {
 
 /// FAQs del servicio
 model ServiceFAQ {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   serviceId String
-  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   question  String
-  answer    String   @db.Text
-  sortOrder Int      @default(0)
+  answer    String @db.Text
+  sortOrder Int    @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -691,25 +691,25 @@ model ServiceFAQ {
 
 /// Promociones de servicios
 model ServicePromotion {
-  id              String        @id @default(cuid())
-  serviceId       String
-  service         Service       @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  id        String  @id @default(cuid())
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
-  code            String?       @unique
-  type            PromotionType
-  value           Decimal       @db.Decimal(10, 2) // % o monto fijo
-  minBookingAmount Decimal?     @db.Decimal(10, 2)
-  maxDiscount     Decimal?      @db.Decimal(10, 2)
-  usageLimit      Int?
-  usageCount      Int           @default(0)
-  perUserLimit    Int           @default(1)
+  code             String?       @unique
+  type             PromotionType
+  value            Decimal       @db.Decimal(10, 2) // % o monto fijo
+  minBookingAmount Decimal?      @db.Decimal(10, 2)
+  maxDiscount      Decimal?      @db.Decimal(10, 2)
+  usageLimit       Int?
+  usageCount       Int           @default(0)
+  perUserLimit     Int           @default(1)
 
-  startsAt        DateTime
-  endsAt          DateTime
-  isActive        Boolean       @default(true)
+  startsAt DateTime
+  endsAt   DateTime
+  isActive Boolean  @default(true)
 
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([serviceId])
   @@index([code])
@@ -719,75 +719,75 @@ model ServicePromotion {
 
 /// Reservas de servicios
 model Booking {
-  id                  String        @id @default(cuid())
-  bookingNumber       String        @unique @default(cuid()) // Número legible
+  id            String @id @default(cuid())
+  bookingNumber String @unique @default(cuid()) // Número legible
 
-  serviceId           String
-  service             Service       @relation(fields: [serviceId], references: [id])
-  packageId           String?
-  package             ServicePackage? @relation(fields: [packageId], references: [id])
-  clientId            String
-  client              User          @relation("ClientBookings", fields: [clientId], references: [id])
-  providerId          String
-  provider            User          @relation("ProviderBookings", fields: [providerId], references: [id])
+  serviceId  String
+  service    Service         @relation(fields: [serviceId], references: [id])
+  packageId  String?
+  package    ServicePackage? @relation(fields: [packageId], references: [id])
+  clientId   String
+  client     User            @relation("ClientBookings", fields: [clientId], references: [id])
+  providerId String
+  provider   User            @relation("ProviderBookings", fields: [providerId], references: [id])
 
   // Fecha y hora
-  scheduledDate       DateTime      @db.Date
-  scheduledStartTime  String        // "14:00"
-  scheduledEndTime    String?       // "16:00"
-  actualStartTime     DateTime?
-  actualEndTime       DateTime?
+  scheduledDate      DateTime  @db.Date
+  scheduledStartTime String // "14:00"
+  scheduledEndTime   String? // "16:00"
+  actualStartTime    DateTime?
+  actualEndTime      DateTime?
 
   // Ubicación del servicio
-  address             String?
-  city                String?
-  state               String?
-  latitude            Float?
-  longitude           Float?
-  addressNotes        String?       // "Timbre 2B", "Porton negro"
+  address      String?
+  city         String?
+  state        String?
+  latitude     Float?
+  longitude    Float?
+  addressNotes String? // "Timbre 2B", "Porton negro"
 
   // Precios
-  subtotal            Decimal       @db.Decimal(10, 2)
-  discount            Decimal       @default(0) @db.Decimal(10, 2)
-  travelFee           Decimal       @default(0) @db.Decimal(10, 2)
-  taxes               Decimal       @default(0) @db.Decimal(10, 2)
-  total               Decimal       @db.Decimal(10, 2)
-  currency            String        @default("COP")
+  subtotal  Decimal @db.Decimal(10, 2)
+  discount  Decimal @default(0) @db.Decimal(10, 2)
+  travelFee Decimal @default(0) @db.Decimal(10, 2)
+  taxes     Decimal @default(0) @db.Decimal(10, 2)
+  total     Decimal @db.Decimal(10, 2)
+  currency  String  @default("COP")
 
   // Promoción aplicada
-  promotionCode       String?
-  promotionDiscount   Decimal?      @db.Decimal(10, 2)
+  promotionCode     String?
+  promotionDiscount Decimal? @db.Decimal(10, 2)
 
   // Estado
-  status              BookingStatus @default(PENDING)
+  status BookingStatus @default(PENDING)
 
   // Notas
-  clientNotes         String?       @db.Text
-  providerNotes       String?       @db.Text
-  internalNotes       String?       @db.Text // Solo visible para admin
+  clientNotes   String? @db.Text
+  providerNotes String? @db.Text
+  internalNotes String? @db.Text // Solo visible para admin
 
   // Cancelación
-  cancelledAt         DateTime?
-  cancelledBy         String?       // userId
-  cancellationReason  String?
+  cancelledAt        DateTime?
+  cancelledBy        String? // userId
+  cancellationReason String?
 
   // Recordatorios
-  reminderSentAt      DateTime?
+  reminderSentAt DateTime?
 
   // Timestamps importantes
-  confirmedAt         DateTime?
-  startedAt           DateTime?
-  completedAt         DateTime?
+  confirmedAt DateTime?
+  startedAt   DateTime?
+  completedAt DateTime?
 
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // Relaciones
-  payment             Payment?
-  review              Review?
-  messages            Message[]
-  dispute             Dispute?
-  statusHistory       BookingStatusHistory[]
+  payment       Payment?
+  review        Review?
+  messages      Message[]
+  dispute       Dispute?
+  statusHistory BookingStatusHistory[]
 
   @@index([clientId])
   @@index([providerId])
@@ -801,17 +801,17 @@ model Booking {
 
 /// Historial de cambios de estado de booking
 model BookingStatusHistory {
-  id        String        @id @default(cuid())
+  id        String  @id @default(cuid())
   bookingId String
-  booking   Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   fromStatus BookingStatus?
   toStatus   BookingStatus
-  changedBy  String?       // userId
+  changedBy  String? // userId
   reason     String?
   metadata   Json?
 
-  createdAt  DateTime      @default(now())
+  createdAt DateTime @default(now())
 
   @@index([bookingId])
   @@map("booking_status_history")
@@ -819,40 +819,40 @@ model BookingStatusHistory {
 
 /// Pagos
 model Payment {
-  id                String        @id @default(cuid())
-  bookingId         String        @unique
-  booking           Booking       @relation(fields: [bookingId], references: [id])
+  id        String  @id @default(cuid())
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
 
-  amount            Decimal       @db.Decimal(10, 2)
-  currency          String        @default("COP")
-  status            PaymentStatus @default(PENDING)
-  method            PaymentMethod?
+  amount   Decimal        @db.Decimal(10, 2)
+  currency String         @default("COP")
+  status   PaymentStatus  @default(PENDING)
+  method   PaymentMethod?
 
   // Gateway info
-  gatewayProvider   String?       // "stripe", "mercadopago"
-  gatewayPaymentId  String?
-  gatewayResponse   Json?
+  gatewayProvider  String? // "stripe", "mercadopago"
+  gatewayPaymentId String?
+  gatewayResponse  Json?
 
   // Para depósitos
-  isDeposit         Boolean       @default(false)
-  depositAmount     Decimal?      @db.Decimal(10, 2)
-  remainingAmount   Decimal?      @db.Decimal(10, 2)
+  isDeposit       Boolean  @default(false)
+  depositAmount   Decimal? @db.Decimal(10, 2)
+  remainingAmount Decimal? @db.Decimal(10, 2)
 
   // Comisiones
-  platformFee       Decimal       @default(0) @db.Decimal(10, 2)
-  platformFeePercent Float        @default(0)
-  providerAmount    Decimal       @db.Decimal(10, 2) // Lo que recibe el proveedor
+  platformFee        Decimal @default(0) @db.Decimal(10, 2)
+  platformFeePercent Float   @default(0)
+  providerAmount     Decimal @db.Decimal(10, 2) // Lo que recibe el proveedor
 
   // Reembolso
-  refundedAmount    Decimal?      @db.Decimal(10, 2)
-  refundedAt        DateTime?
-  refundReason      String?
+  refundedAmount Decimal?  @db.Decimal(10, 2)
+  refundedAt     DateTime?
+  refundReason   String?
 
-  paidAt            DateTime?
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
+  paidAt    DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
-  transactions      Transaction[]
+  transactions Transaction[]
 
   @@index([status])
   @@index([gatewayPaymentId])
@@ -861,25 +861,25 @@ model Payment {
 
 /// Métodos de pago guardados del usuario
 model UserPaymentMethod {
-  id              String        @id @default(cuid())
-  userId          String
-  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type            PaymentMethod
-  provider        String        // "stripe", "mercadopago"
-  providerMethodId String       // ID en el gateway
+  type             PaymentMethod
+  provider         String // "stripe", "mercadopago"
+  providerMethodId String // ID en el gateway
 
   // Info de tarjeta (tokenizada)
-  last4           String?
-  brand           String?       // "visa", "mastercard"
-  expiryMonth     Int?
-  expiryYear      Int?
+  last4       String?
+  brand       String? // "visa", "mastercard"
+  expiryMonth Int?
+  expiryYear  Int?
 
-  isDefault       Boolean       @default(false)
-  isActive        Boolean       @default(true)
+  isDefault Boolean @default(false)
+  isActive  Boolean @default(true)
 
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@map("user_payment_methods")
@@ -887,19 +887,19 @@ model UserPaymentMethod {
 
 /// Transacciones (movimientos de dinero)
 model Transaction {
-  id            String   @id @default(cuid())
-  userId        String
-  user          User     @relation(fields: [userId], references: [id])
-  paymentId     String?
-  payment       Payment? @relation(fields: [paymentId], references: [id])
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  paymentId String?
+  payment   Payment? @relation(fields: [paymentId], references: [id])
 
-  type          String   // "payment", "refund", "payout", "fee"
-  amount        Decimal  @db.Decimal(10, 2)
-  currency      String   @default("COP")
-  description   String?
-  metadata      Json?
+  type        String // "payment", "refund", "payout", "fee"
+  amount      Decimal @db.Decimal(10, 2)
+  currency    String  @default("COP")
+  description String?
+  metadata    Json?
 
-  createdAt     DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([paymentId])
@@ -910,44 +910,44 @@ model Transaction {
 
 /// Reseñas y calificaciones
 model Review {
-  id              String   @id @default(cuid())
-  bookingId       String   @unique
-  booking         Booking  @relation(fields: [bookingId], references: [id])
-  serviceId       String
-  service         Service  @relation(fields: [serviceId], references: [id])
-  authorId        String
-  author          User     @relation("ReviewAuthor", fields: [authorId], references: [id])
-  targetId        String
-  target          User     @relation("ReviewTarget", fields: [targetId], references: [id])
+  id        String  @id @default(cuid())
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id])
+  serviceId String
+  service   Service @relation(fields: [serviceId], references: [id])
+  authorId  String
+  author    User    @relation("ReviewAuthor", fields: [authorId], references: [id])
+  targetId  String
+  target    User    @relation("ReviewTarget", fields: [targetId], references: [id])
 
   // Calificaciones
-  overallRating   Int      // 1-5
-  qualityRating   Int?     // Calidad del servicio
-  punctualityRating Int?   // Puntualidad
+  overallRating       Int // 1-5
+  qualityRating       Int? // Calidad del servicio
+  punctualityRating   Int? // Puntualidad
   communicationRating Int? // Comunicación
-  valueRating     Int?     // Relación calidad/precio
+  valueRating         Int? // Relación calidad/precio
 
   // Contenido
-  title           String?
-  comment         String?  @db.Text
-  images          String[] // URLs de fotos del trabajo
+  title   String?
+  comment String?  @db.Text
+  images  String[] // URLs de fotos del trabajo
 
   // Respuesta del proveedor
-  response        String?  @db.Text
-  respondedAt     DateTime?
+  response    String?   @db.Text
+  respondedAt DateTime?
 
   // Moderación
-  isVerified      Boolean  @default(false) // Compra verificada
-  isHidden        Boolean  @default(false)
-  hiddenReason    String?
-  reportCount     Int      @default(0)
+  isVerified   Boolean @default(false) // Compra verificada
+  isHidden     Boolean @default(false)
+  hiddenReason String?
+  reportCount  Int     @default(0)
 
   // Utilidad
-  helpfulCount    Int      @default(0)
-  notHelpfulCount Int      @default(0)
+  helpfulCount    Int @default(0)
+  notHelpfulCount Int @default(0)
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([serviceId])
   @@index([authorId])
@@ -959,11 +959,11 @@ model Review {
 
 /// Favoritos/Guardados
 model Favorite {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   serviceId String
-  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
@@ -975,17 +975,17 @@ model Favorite {
 
 /// Conversaciones de chat
 model Conversation {
-  id            String   @id @default(cuid())
-  bookingId     String?  // Opcional, puede ser consulta general
+  id        String  @id @default(cuid())
+  bookingId String? // Opcional, puede ser consulta general
 
   lastMessageAt DateTime @default(now())
   lastMessage   String?
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  participants  ConversationParticipant[]
-  messages      Message[]
+  participants ConversationParticipant[]
+  messages     Message[]
 
   @@index([lastMessageAt])
   @@map("conversations")
@@ -993,18 +993,18 @@ model Conversation {
 
 /// Participantes de conversación
 model ConversationParticipant {
-  id              String       @id @default(cuid())
-  conversationId  String
-  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  userId          String
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  unreadCount     Int          @default(0)
-  lastReadAt      DateTime?
-  isMuted         Boolean      @default(false)
-  isArchived      Boolean      @default(false)
+  unreadCount Int       @default(0)
+  lastReadAt  DateTime?
+  isMuted     Boolean   @default(false)
+  isArchived  Boolean   @default(false)
 
-  joinedAt        DateTime     @default(now())
+  joinedAt DateTime @default(now())
 
   @@unique([conversationId, userId])
   @@index([userId])
@@ -1013,28 +1013,28 @@ model ConversationParticipant {
 
 /// Mensajes
 model Message {
-  id              String        @id @default(cuid())
-  conversationId  String
-  conversation    Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  senderId        String
-  sender          User          @relation("MessageSender", fields: [senderId], references: [id])
-  receiverId      String?
-  receiver        User?         @relation("MessageReceiver", fields: [receiverId], references: [id])
-  bookingId       String?
-  booking         Booking?      @relation(fields: [bookingId], references: [id])
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("MessageSender", fields: [senderId], references: [id])
+  receiverId     String?
+  receiver       User?        @relation("MessageReceiver", fields: [receiverId], references: [id])
+  bookingId      String?
+  booking        Booking?     @relation(fields: [bookingId], references: [id])
 
-  content         String        @db.Text
-  type            String        @default("text") // "text", "image", "file", "system", "booking_update"
-  attachments     Json?         // [{url, type, name, size}]
-  metadata        Json?         // Para mensajes del sistema
+  content     String @db.Text
+  type        String @default("text") // "text", "image", "file", "system", "booking_update"
+  attachments Json? // [{url, type, name, size}]
+  metadata    Json? // Para mensajes del sistema
 
-  isRead          Boolean       @default(false)
-  readAt          DateTime?
-  isDeleted       Boolean       @default(false)
-  deletedAt       DateTime?
+  isRead    Boolean   @default(false)
+  readAt    DateTime?
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
 
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([conversationId])
   @@index([senderId])
@@ -1046,24 +1046,24 @@ model Message {
 
 /// Notificaciones
 model Notification {
-  id          String           @id @default(cuid())
-  userId      String
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type        NotificationType
-  title       String
-  body        String
-  data        Json?            // Datos adicionales para navegación
-  imageUrl    String?
+  type     NotificationType
+  title    String
+  body     String
+  data     Json? // Datos adicionales para navegación
+  imageUrl String?
 
-  isRead      Boolean          @default(false)
-  readAt      DateTime?
+  isRead Boolean   @default(false)
+  readAt DateTime?
 
   // Para programadas
   scheduledFor DateTime?
   sentAt       DateTime?
 
-  createdAt   DateTime         @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId, isRead])
   @@index([type])
@@ -1073,12 +1073,12 @@ model Notification {
 
 /// Historial de búsquedas
 model SearchHistory {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  query     String
-  filters   Json?
+  query        String
+  filters      Json?
   resultsCount Int?
 
   createdAt DateTime @default(now())
@@ -1090,26 +1090,26 @@ model SearchHistory {
 
 /// Reportes de usuarios/servicios
 model Report {
-  id          String       @id @default(cuid())
-  authorId    String
-  author      User         @relation("ReportAuthor", fields: [authorId], references: [id])
-  targetId    String?
-  target      User?        @relation("ReportTarget", fields: [targetId], references: [id])
+  id       String  @id @default(cuid())
+  authorId String
+  author   User    @relation("ReportAuthor", fields: [authorId], references: [id])
+  targetId String?
+  target   User?   @relation("ReportTarget", fields: [targetId], references: [id])
 
-  targetType  String       // "user", "service", "review", "message"
-  targetRefId String       // ID del objeto reportado
+  targetType  String // "user", "service", "review", "message"
+  targetRefId String // ID del objeto reportado
 
   reason      ReportReason
   description String?      @db.Text
-  evidence    String[]     // URLs de screenshots
+  evidence    String[] // URLs de screenshots
 
-  status      ReportStatus @default(PENDING)
-  resolvedAt  DateTime?
-  resolvedBy  String?
-  resolution  String?
+  status     ReportStatus @default(PENDING)
+  resolvedAt DateTime?
+  resolvedBy String?
+  resolution String?
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([authorId])
   @@index([targetId])
@@ -1120,28 +1120,28 @@ model Report {
 
 /// Disputas de bookings
 model Dispute {
-  id              String        @id @default(cuid())
-  bookingId       String        @unique
-  booking         Booking       @relation(fields: [bookingId], references: [id])
-  clientId        String
-  client          User          @relation("DisputeClient", fields: [clientId], references: [id])
-  providerId      String
-  provider        User          @relation("DisputeProvider", fields: [providerId], references: [id])
+  id         String  @id @default(cuid())
+  bookingId  String  @unique
+  booking    Booking @relation(fields: [bookingId], references: [id])
+  clientId   String
+  client     User    @relation("DisputeClient", fields: [clientId], references: [id])
+  providerId String
+  provider   User    @relation("DisputeProvider", fields: [providerId], references: [id])
 
-  reason          String
-  description     String        @db.Text
-  evidence        String[]      // URLs
+  reason      String
+  description String   @db.Text
+  evidence    String[] // URLs
 
-  status          DisputeStatus @default(OPEN)
+  status DisputeStatus @default(OPEN)
 
   // Resolución
-  resolution      String?       @db.Text
-  refundAmount    Decimal?      @db.Decimal(10, 2)
-  resolvedAt      DateTime?
-  resolvedBy      String?
+  resolution   String?   @db.Text
+  refundAmount Decimal?  @db.Decimal(10, 2)
+  resolvedAt   DateTime?
+  resolvedBy   String?
 
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([clientId])
   @@index([providerId])
@@ -1151,26 +1151,26 @@ model Dispute {
 
 /// Sistema de referidos
 model Referral {
-  id            String   @id @default(cuid())
-  referrerId    String
-  referrer      User     @relation("ReferrerUser", fields: [referrerId], references: [id])
-  referredId    String   @unique
-  referred      User     @relation("ReferredUser", fields: [referredId], references: [id])
+  id         String @id @default(cuid())
+  referrerId String
+  referrer   User   @relation("ReferrerUser", fields: [referrerId], references: [id])
+  referredId String @unique
+  referred   User   @relation("ReferredUser", fields: [referredId], references: [id])
 
-  code          String
+  code String
 
   // Recompensas
-  referrerReward Decimal? @db.Decimal(10, 2)
-  referredReward Decimal? @db.Decimal(10, 2)
-  rewardsClaimed Boolean  @default(false)
-  claimedAt     DateTime?
+  referrerReward Decimal?  @db.Decimal(10, 2)
+  referredReward Decimal?  @db.Decimal(10, 2)
+  rewardsClaimed Boolean   @default(false)
+  claimedAt      DateTime?
 
   // Condiciones
-  conditionMet  Boolean  @default(false) // Ej: primera reserva completada
+  conditionMet   Boolean   @default(false) // Ej: primera reserva completada
   conditionMetAt DateTime?
 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([referrerId])
   @@index([code])
@@ -1179,31 +1179,31 @@ model Referral {
 
 /// Suscripciones de proveedores (plan premium)
 model Subscription {
-  id                  String             @id @default(cuid())
-  userId              String             @unique
-  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  plan                SubscriptionPlan   @default(FREE)
-  status              SubscriptionStatus @default(ACTIVE)
+  plan   SubscriptionPlan   @default(FREE)
+  status SubscriptionStatus @default(ACTIVE)
 
   // Facturación
-  billingCycle        String?            // "monthly", "yearly"
-  currentPeriodStart  DateTime?
-  currentPeriodEnd    DateTime?
+  billingCycle       String? // "monthly", "yearly"
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
 
   // Gateway
-  gatewayProvider     String?
+  gatewayProvider       String?
   gatewaySubscriptionId String?
-  gatewayCustomerId   String?
+  gatewayCustomerId     String?
 
   // Trial
-  trialEndsAt         DateTime?
+  trialEndsAt DateTime?
 
-  cancelledAt         DateTime?
-  cancellationReason  String?
+  cancelledAt        DateTime?
+  cancellationReason String?
 
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([status])
   @@index([plan])
@@ -1212,22 +1212,22 @@ model Subscription {
 
 /// Log de actividad (auditoría)
 model ActivityLog {
-  id          String   @id @default(cuid())
-  userId      String?
-  user        User?    @relation(fields: [userId], references: [id])
+  id     String  @id @default(cuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 
-  action      String   // "login", "booking.create", "service.update", etc.
-  entityType  String?  // "booking", "service", "user"
-  entityId    String?
+  action     String // "login", "booking.create", "service.update", etc.
+  entityType String? // "booking", "service", "user"
+  entityId   String?
 
-  oldValues   Json?
-  newValues   Json?
-  metadata    Json?
+  oldValues Json?
+  newValues Json?
+  metadata  Json?
 
-  ipAddress   String?
-  userAgent   String?
+  ipAddress String?
+  userAgent String?
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([action])
@@ -1238,9 +1238,9 @@ model ActivityLog {
 
 /// Configuración global del sistema
 model SystemConfig {
-  id        String   @id @default(cuid())
-  key       String   @unique
-  value     Json
+  id    String @id @default(cuid())
+  key   String @unique
+  value Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1250,27 +1250,27 @@ model SystemConfig {
 
 /// Banners y contenido promocional
 model Banner {
-  id          String    @id @default(cuid())
-  title       String
-  subtitle    String?
-  imageUrl    String
-  linkUrl     String?
-  linkType    String?   // "service", "category", "external", "promotion"
-  linkRefId   String?
+  id        String  @id @default(cuid())
+  title     String
+  subtitle  String?
+  imageUrl  String
+  linkUrl   String?
+  linkType  String? // "service", "category", "external", "promotion"
+  linkRefId String?
 
-  position    String    @default("home") // "home", "category", "search"
-  sortOrder   Int       @default(0)
+  position  String @default("home") // "home", "category", "search"
+  sortOrder Int    @default(0)
 
-  isActive    Boolean   @default(true)
-  startsAt    DateTime?
-  endsAt      DateTime?
+  isActive Boolean   @default(true)
+  startsAt DateTime?
+  endsAt   DateTime?
 
   // Métricas
-  impressions Int       @default(0)
-  clicks      Int       @default(0)
+  impressions Int @default(0)
+  clicks      Int @default(0)
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([position, isActive])
   @@index([startsAt, endsAt])

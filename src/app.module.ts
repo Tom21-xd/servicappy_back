@@ -14,6 +14,10 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { ChatModule } from './chat/chat.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { PromotionsModule } from './promotions/promotions.module';
+import { ReportsModule } from './reports/reports.module';
+import { SearchModule } from './search/search.module';
+import { AdminModule } from './admin/admin.module';
 import { JwtAuthGuard } from './auth/guards';
 import { AllExceptionsFilter } from './common/filters';
 import { TransformInterceptor } from './common/interceptors';
@@ -35,6 +39,10 @@ import { TransformInterceptor } from './common/interceptors';
     FavoritesModule,
     ChatModule,
     NotificationsModule,
+    PromotionsModule,
+    ReportsModule,
+    SearchModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
