@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
-import { RegisterDto, TokensDto } from './dto';
+import { RegisterDto, TokensDto, AuthResponseDto } from './dto';
 import { JwtPayload } from './strategies/jwt.strategy';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async register(dto: RegisterDto): Promise<TokensDto> {
+  async register(dto: RegisterDto): Promise<AuthResponseDto> {
     const existingUser = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -48,11 +48,11 @@ export class AuthService {
       },
     });
 
-    return this.generateTokens(user);
+    return this.generateAuthResponse(user);
   }
 
-  async login(user: any): Promise<TokensDto> {
-    return this.generateTokens(user);
+  async login(user: any): Promise<AuthResponseDto> {
+    return this.generateAuthResponse(user);
   }
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -137,6 +137,24 @@ export class AuthService {
       accessToken,
       refreshToken,
       expiresIn: 900,
+    };
+  }
+
+  generateAuthResponse(user: any): AuthResponseDto {
+    const tokens = this.generateTokens(user);
+
+    return {
+      ...tokens,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone,
+        avatar: user.avatar,
+        role: user.role,
+        status: user.status,
+      },
     };
   }
 }

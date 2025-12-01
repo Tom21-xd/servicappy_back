@@ -18,6 +18,7 @@ import { PromotionsModule } from './promotions/promotions.module';
 import { ReportsModule } from './reports/reports.module';
 import { SearchModule } from './search/search.module';
 import { AdminModule } from './admin/admin.module';
+import { UploadsModule } from './uploads/uploads.module';
 import { JwtAuthGuard } from './auth/guards';
 import { AllExceptionsFilter } from './common/filters';
 import { TransformInterceptor } from './common/interceptors';
@@ -43,6 +44,7 @@ import { TransformInterceptor } from './common/interceptors';
     ReportsModule,
     SearchModule,
     AdminModule,
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [
